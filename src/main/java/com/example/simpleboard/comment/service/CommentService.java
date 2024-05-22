@@ -2,23 +2,27 @@ package com.example.simpleboard.comment.service;
 
 import com.example.simpleboard.comment.db.CommentEntity;
 import com.example.simpleboard.comment.db.CommentRepository;
+import com.example.simpleboard.comment.model.CommentDto;
 import com.example.simpleboard.comment.model.CommentRequest;
+import com.example.simpleboard.post.db.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final CommentConverter commentConverter;
 
-    public CommentEntity create(
+    public CommentDto create(
             CommentRequest commentRequest
     ){
+        var postEntity = postRepository.findById(commentRequest.getPostId()).get();
+
         var entity = CommentEntity.builder()
-                .postId(commentRequest.getPostId())
+                .post(postEntity)
                 .email(commentRequest.getEmail())
                 .userName(commentRequest.getUserName())
                 .password(commentRequest.getPassword())
@@ -28,11 +32,7 @@ public class CommentService {
                 .commentedAt(LocalDateTime.now())
                 .build()
                 ;
-
-        return commentRepository.save(entity);
-    }
-
-    public List<CommentEntity> findAllByPostId(Long postId){
-        return commentRepository.findAllByPostIdAndStatusOrderByIdDesc(postId, "REGISTERED");
+        var saveComment =  commentRepository.save(entity);
+        return commentConverter.toDto(saveComment);
     }
 }

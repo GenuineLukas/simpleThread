@@ -1,40 +1,37 @@
 package com.example.simpleboard.post.model;
 
+import com.example.simpleboard.comment.model.CommentDto;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
-@ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PostRequest {
-    //화면에서 받아야 할 것들
-    private Long postId;
+public class PostDto{
+    private Long id;
 
-    private Long boardId = 1L;
+    private Long boardId;
 
-    @NotBlank
     private String userName;
 
-    @NotBlank
-    @Size(min=4, max=4)
     private String password;
 
-    @NotBlank
-    @Email
     private String email;
 
-    @NotBlank
+    private String status;
+
     private String title;
 
-    @NotBlank
     private String content;
+
+    private List<CommentDto> commentList = List.of();
+
+    private LocalDateTime postedAt;
 }

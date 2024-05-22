@@ -1,6 +1,7 @@
 package com.example.simpleboard.comment.controller;
 
 import com.example.simpleboard.comment.db.CommentEntity;
+import com.example.simpleboard.comment.model.CommentDto;
 import com.example.simpleboard.comment.model.CommentRequest;
 import com.example.simpleboard.comment.service.CommentService;
 import jakarta.validation.Valid;
@@ -18,7 +19,7 @@ public class CommentApiController {
     private final CommentService commentService;
 
     @PostMapping("")
-    public CommentEntity create(
+    public CommentDto create(
         @Valid
         @RequestBody CommentRequest commentRequest
         ){
